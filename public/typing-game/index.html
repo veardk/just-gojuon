@@ -468,16 +468,16 @@
 				$('#furigana').prop('checked', true);
 			}
 
-			$('.buttons-start').hide();
-			$('.title').hide();
-
-			const lang = getCurrentLanguage();
-			const t = translations[lang];
-			$('.main-container').prepend(`<div class="game-header" style="text-align: center; margin: 20px 0; color: #34495e;"><h3>${t.title}</h3></div>`);
-
 			setTimeout(function() {
+				$('.buttons-start').hide();
+				$('.title').hide();
+
+				const lang = getCurrentLanguage();
+				const t = translations[lang];
+				$('.main-container').prepend(`<div class="game-header" style="text-align: center; margin: 20px 0; color: #34495e;"><h3>${t.title}</h3></div>`);
+
 				btn_start();
-			}, 100);
+			}, 200);
 			return;
 		}
 
@@ -709,7 +709,8 @@
 
 
     	var buttonParent = $(this).length ? $(this).parent() : $('.buttons-start');
-    	buttonParent.fadeOut(200, function () {
+
+    	var startGame = function() {
     		$('.main-content').slideDown();
     		$('.main-container').animate({
     			'margin-top': '-150px'
@@ -725,15 +726,12 @@
                 var kanaChar = whatDoIKnow[rand(0, whatDoIKnow.length - 1)];
                 var originalChar = kanaChar;
 
-                // 检查是否是混合模式 - 直接检查URL参数和选中状态
                 var selectedKanaType = $('input[name="kana"]:checked').val();
                 var urlParams = new URLSearchParams(window.location.search);
                 var urlKanaType = urlParams.get('kana');
                 var isMixedMode = (selectedKanaType === 'all') || (urlKanaType === 'all') || window.mixedMode;
 
-                // 处理混合模式
                 if (isMixedMode) {
-                    // 随机选择平假名或片假名
                     var useKatakana = Math.random() < 0.5;
                     kanaChar = useKatakana ? hiraganaToKatakana(kanaChar) : kanaChar;
                 } else {
@@ -743,7 +741,13 @@
 
 		    	$('.kana-container').append('<span class="white">' + kanaChar + '</span>');
 		    }
-    	});
+    	};
+
+    	if (buttonParent.is(':visible')) {
+    		buttonParent.fadeOut(200, startGame);
+    	} else {
+    		startGame();
+    	}
 
 
         let table = document.getElementById("false-chars"); // clear all mistakes table's rows
