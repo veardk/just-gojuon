@@ -63,7 +63,7 @@ const Header: React.FC<HeaderProps> = ({ className, ...props }) => {
               onClick={() => router.push('/')}
             >
               <img
-                src="/logo.png"
+                src={`${router.basePath || ''}/logo.png`}
                 alt={APP_INFO.name}
                 className="w-32 h-32 md:w-36 md:h-36 object-contain"
                 onError={(e) => {

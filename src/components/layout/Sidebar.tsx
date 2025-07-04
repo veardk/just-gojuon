@@ -62,7 +62,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className, ...props }) => {
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
           <div className="flex items-center space-x-3">
             <img
-              src="/logo.png"
+              src={`${router.basePath || ''}/logo.png`}
               alt={APP_INFO.name}
               className="w-8 h-8 object-contain"
             />

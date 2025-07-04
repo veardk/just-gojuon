@@ -1,6 +1,7 @@
 import { KanaCharacter } from '@/types/kana';
 export const getAudioUrl = (character: KanaCharacter): string => {
-  return `/sounds/${character.romaji}.mp3`;
+  const basePath = process.env.NODE_ENV === 'production' ? '/just-gojuon' : '';
+  return `${basePath}/sounds/${character.romaji}.mp3`;
 };
 export const checkAudioExists = async (url: string): Promise<boolean> => {
   try {
