@@ -103,7 +103,8 @@ export const getKanaAudioUrl = (character: KanaCharacter): string => {
     [KanaCategory.YOON]: 'yoon'
   };
   const categoryFolder = categoryPath[character.category];
-  return `/sounds/${categoryFolder}/${character.romaji}.mp3`;
+  const basePath = process.env.NODE_ENV === 'production' ? '/just-gojuon' : '';
+  return `${basePath}/sounds/${categoryFolder}/${character.romaji}.mp3`;
 };
 export const isValidKanaCharacter = (char: string): boolean => {
   const hiraganaRegex = /[\u3040-\u309F]/;

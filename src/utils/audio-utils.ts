@@ -111,7 +111,8 @@ export const preloadAudioBatch = async (urls: string[]): Promise<AudioPlayer[]> 
 };
 export const generateTTSAudio = async (text: string, language: string = 'ja-JP'): Promise<string> => {
   console.log(`Generating TTS audio for: ${text} in ${language}`);
-  return `/sounds/generated/${text}.mp3`;
+  const basePath = process.env.NODE_ENV === 'production' ? '/just-gojuon' : '';
+  return `${basePath}/sounds/generated/${text}.mp3`;
 };
 export const convertAudioFormat = async (
   inputUrl: string, 

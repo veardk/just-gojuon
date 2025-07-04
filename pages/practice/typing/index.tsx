@@ -26,9 +26,10 @@ const TypingPracticePage: React.FC = () => {
       kana: kanaType,
       chars: characterCount.toString(),
       furigana: showFurigana.toString(),
-      lang: language 
+      lang: language
     });
-    const gameUrl = `/typing-game/index.html?${params.toString()}`;
+    const basePath = router.basePath || '';
+    const gameUrl = `${basePath}/typing-game/index.html?${params.toString()}`;
     window.open(gameUrl, '_blank');
   };
   return (
