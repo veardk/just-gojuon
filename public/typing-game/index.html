@@ -348,10 +348,6 @@
             Display furigana on mistakes
           </label>
           <br><br>
-          <a href="/practice/typing/" class="btn btn-large btn-default btn-embossed">
-            <span class="fui-arrow-left"></span>
-            返回
-          </a>
      	</div>
      </div>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -426,7 +422,6 @@
 		});
 
 		$('.btn-start .start').text(t.start);
-		$('a[href="/practice/typing/"]').html(`<span class="fui-arrow-left"></span> ${t.returnToMain}`);
 		$('.btn-return-home .return-text').text(t.returnToMain);
 		$('#false-chars th').eq(0).text(t.no);
 		$('#false-chars th').eq(1).text(t.kana);
@@ -943,6 +938,9 @@
     		const lang = getCurrentLanguage();
     		const t = translations[lang];
     		$('.btn-start .start').text(t.restart);
+
+    		// 更新所有界面文本为当前语言
+    		updatePageTexts();
 
             //flash counter button on mistake found
             if (false_chars.length > 0) {
