@@ -486,7 +486,7 @@
 			$('#furigana').prop('checked', true);
 		}
 
-		// 如果有参数，隐藏设置界面并自动开始游戏
+		// 如果有参数，标记需要自动开始
 		if (urlParams.has('kana') || urlParams.has('chars')) {
 			// 隐藏设置界面和标题
 			$('.buttons-start').hide();
@@ -497,10 +497,8 @@
 			const t = translations[lang];
 			$('.main-container').prepend(`<div class="game-header" style="text-align: center; margin: 20px 0; color: #34495e;"><h3>${t.title}</h3></div>`);
 
-			// 延迟一点时间确保UI更新完成，然后自动开始
-			setTimeout(function() {
-				$('.btn-start').click();
-			}, 100);
+			// 设置自动开始标记
+			window.shouldAutoStart = true;
 		}
 
 
@@ -785,6 +783,13 @@
     var false_chars = [];
 
     $('.btn-start').on("click", btn_start); // enable start btn when app started
+
+    // 检查是否需要自动开始游戏
+    if (window.shouldAutoStart) {
+        setTimeout(function() {
+            $('.btn-start').click();
+        }, 500); // 增加延迟确保所有初始化完成
+    }
 
     // 修复输入处理
     $('.romaji-container').on('input keyup paste', function (e) {
