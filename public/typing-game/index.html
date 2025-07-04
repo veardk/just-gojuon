@@ -410,7 +410,9 @@
 		$('label').each(function() {
 			const $this = $(this);
 			if ($this.find('#num_of_chars').length) {
-				$this.html(`<input class='chars' type="number" name="num_of_chars_name" id="num_of_chars" value="100"> ${t.chars}`);
+				// 保持当前值，不要重置为100
+				const currentValue = $('#num_of_chars').val() || 100;
+				$this.html(`<input class='chars' type="number" name="num_of_chars_name" id="num_of_chars" value="${currentValue}"> ${t.chars}`);
 			}
 		});
 
@@ -448,10 +450,16 @@
 
 	// 解析URL参数并应用配置
 	$(document).ready(function() {
-		// 更新页面文本
-		updatePageTexts();
-
 		const urlParams = new URLSearchParams(window.location.search);
+
+		// 先设置字符数量
+		const chars = urlParams.get('chars');
+		if (chars && !isNaN(chars)) {
+			$('#num_of_chars').val(parseInt(chars));
+		}
+
+		// 然后更新页面文本（这样会保持我们刚设置的值）
+		updatePageTexts();
 
 		// 设置假名类型
 		const kanaType = urlParams.get('kana');
@@ -470,12 +478,6 @@
 			$('#hiragana').prop('checked', true);
 			$('#katakana').prop('checked', false);
 			$('#all').prop('checked', false);
-		}
-
-		// 设置字符数量
-		const chars = urlParams.get('chars');
-		if (chars && !isNaN(chars)) {
-			$('#num_of_chars').val(parseInt(chars));
 		}
 
 		// 设置振假名显示
