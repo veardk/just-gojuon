@@ -412,7 +412,9 @@
 			if ($this.find('#num_of_chars').length) {
 				// 保持当前值，不要重置为100
 				const currentValue = $('#num_of_chars').val() || 100;
+				console.log('updatePageTexts: current value before update:', currentValue);
 				$this.html(`<input class='chars' type="number" name="num_of_chars_name" id="num_of_chars" value="${currentValue}"> ${t.chars}`);
+				console.log('updatePageTexts: value after update:', $('#num_of_chars').val());
 			}
 		});
 
@@ -454,8 +456,12 @@
 
 		// 先设置字符数量
 		const chars = urlParams.get('chars');
+		console.log('URL chars parameter:', chars);
 		if (chars && !isNaN(chars)) {
-			$('#num_of_chars').val(parseInt(chars));
+			const charCount = parseInt(chars);
+			console.log('Setting character count to:', charCount);
+			$('#num_of_chars').val(charCount);
+			console.log('Character count after setting:', $('#num_of_chars').val());
 		}
 
 		// 然后更新页面文本（这样会保持我们刚设置的值）
@@ -489,7 +495,13 @@
 		}
 
 		// 如果有参数，自动开始游戏
+		console.log('Checking for auto-start parameters...');
+		console.log('Has kana param:', urlParams.has('kana'));
+		console.log('Has chars param:', urlParams.has('chars'));
+
 		if (urlParams.has('kana') || urlParams.has('chars')) {
+			console.log('Auto-starting game...');
+
 			// 隐藏设置界面和标题
 			$('.buttons-start').hide();
 			$('.title').hide();
@@ -501,8 +513,12 @@
 
 			// 直接调用开始函数，而不是点击按钮
 			setTimeout(function() {
+				console.log('Calling btn_start function...');
+				console.log('Character count before start:', $('#num_of_chars').val());
 				btn_start();
-			}, 500);
+			}, 1000); // 增加延迟时间
+		} else {
+			console.log('No auto-start parameters found, staying on settings page');
 		}
 
 
