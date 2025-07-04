@@ -19,7 +19,7 @@
     	background: #ecf0f1;
     }
 
-    /* 修复输入框样式 */
+
     .romaji-container {
         background: #f8f9fa !important;
         border: 3px solid #e9ecef !important;
@@ -34,7 +34,7 @@
         font-family: 'Monaco', 'Menlo', 'Consolas', monospace !important;
         letter-spacing: 2px !important;
         line-height: 1.4 !important;
-        /* 确保 contenteditable 正常工作 */
+
         display: block !important;
         word-wrap: break-word !important;
         overflow-wrap: break-word !important;
@@ -47,7 +47,7 @@
         background: #fff !important;
     }
 
-    /* 重置所有ruby相关的默认样式 */
+
     ruby, ruby rt, ruby rp {
         margin: 0 !important;
         padding: 0 !important;
@@ -59,7 +59,7 @@
         text-shadow: none !important;
     }
 
-    /* 修复振假名显示样式 */
+
     ruby {
         display: inline-block !important;
         position: relative !important;
@@ -94,7 +94,7 @@
         width: 100% !important;
     }
 
-    /* 确保假名字符在ruby标签中保持原有大小和颜色 */
+
     .kana-container ruby {
         font-size: 60px !important;
         color: inherit !important;
@@ -124,7 +124,7 @@
         text-align: center !important;
     }
 
-    /* 红色错误状态下的振假名样式 */
+
     .kana-container .red ruby rt {
         color: #e74c3c !important;
         font-weight: normal !important;
@@ -132,7 +132,7 @@
         box-shadow: none !important;
         text-shadow: none !important;
     }
-    /* 返回按钮样式 */
+
     .btn-return-home {
         background-color: #95a5a6 !important;
         border-color: #7f8c8d !important;
@@ -278,7 +278,7 @@
         color: white;
         padding: 10px;
         text-align: center;
-        border: 2px solid #ddd; /* Add a border */
+        border: 2px solid #ddd;
    }
 
    #false-chars td.right{
@@ -305,7 +305,7 @@
 			<a id="btn-counter" class="btn btn-huge btn-info btn-embossed mlm">
  				<span class='fui-checkbox-checked'></span> &nbsp; <span class='score'>0 / 100</span>
 			</a>
-			<a href="/practice/typing/" class="btn btn-large btn-default btn-embossed mlm btn-return-home">
+			<a href="/just-gojuon/practice/typing/" class="btn btn-large btn-default btn-embossed mlm btn-return-home">
 				<span class="fui-arrow-left"></span>
 				<span class="return-text">返回</span>
 			</a>
@@ -430,7 +430,7 @@
 		$('.game-header h3').text(t.title);
 	}
 
-	// 解析URL参数并应用配置
+
 	$(document).ready(function() {
 		const urlParams = new URLSearchParams(window.location.search);
 
@@ -503,7 +503,7 @@
     	'りゃ', 'りゅ', 'りょ',
     	'ぎゃ', 'ぎゅ', 'ぎょ',
     	'じゃ', 'じゅ', 'じょ',
-    	// 'ぢゃ', 'ぢゅ', 'ぢょ',
+
     	'びゃ', 'びゅ', 'びょ',
     	'ぴゃ', 'ぴょ', 'ぴょ'
     ];
@@ -598,7 +598,7 @@
     };
 		
     var kanaToRomaji = function (kana) {
-        // 在混合模式下，我们需要检查字符本身是平假名还是片假名
+
         if (window.mixedMode || isCharKatakana(kana)) {
             if (isCharKatakana(kana)) {
                 kana = katakanaToHiragana(kana);
