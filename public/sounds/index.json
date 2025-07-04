@@ -1,0 +1,85 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "description": "Japanese Kana Audio Files for Just Gojuon",
+    "totalFiles": 104,
+    "categories": 4,
+    "lastUpdated": "2024-07-03"
+  },
+  "categories": {
+    "seion": {
+      "name": "清音",
+      "nameEn": "Seion (Clear Sounds)",
+      "description": "基础日语音节",
+      "count": 46,
+      "files": [
+        "a", "i", "u", "e", "o",
+        "ka", "ki", "ku", "ke", "ko",
+        "sa", "si", "su", "se", "so",
+        "ta", "chi", "tsu", "te", "to",
+        "na", "ni", "nu", "ne", "no",
+        "ha", "hi", "hu", "he", "ho",
+        "ma", "mi", "mu", "me", "mo",
+        "ya", "yu", "yo",
+        "ra", "ri", "ru", "re", "ro",
+        "wa", "wo", "n"
+      ]
+    },
+    "dakuon": {
+      "name": "浊音",
+      "nameEn": "Dakuon (Voiced Sounds)",
+      "description": "浊化的音节",
+      "count": 20,
+      "files": [
+        "ga", "gi", "gu", "ge", "go",
+        "za", "zi", "zu", "ze", "zo",
+        "da", "di", "du", "de", "do",
+        "ba", "bi", "bu", "be", "bo"
+      ]
+    },
+    "handakuon": {
+      "name": "半浊音",
+      "nameEn": "Handakuon (Semi-voiced)",
+      "description": "半浊化的音节",
+      "count": 5,
+      "files": [
+        "pa", "pi", "pu", "pe", "po"
+      ]
+    },
+    "yoon": {
+      "name": "拗音",
+      "nameEn": "Yoon (Contracted)",
+      "description": "复合音节",
+      "count": 33,
+      "files": [
+        "kya", "kyu", "kyo",
+        "sya", "syu", "syo",
+        "cya", "cyu", "cyo",
+        "nya", "nyu", "nyo",
+        "hya", "hyu", "hyo",
+        "mya", "myu", "myo",
+        "rya", "ryu", "ryo",
+        "gya", "gyu", "gyo",
+        "zya", "zyu", "zyo",
+        "bya", "byu", "byo",
+        "pya", "pyu", "pyo"
+      ]
+    }
+  },
+  "usage": {
+    "pathPattern": "/sounds/{category}/{romaji}.mp3",
+    "examples": [
+      "/sounds/seion/a.mp3",
+      "/sounds/dakuon/ga.mp3",
+      "/sounds/handakuon/pa.mp3",
+      "/sounds/yoon/kya.mp3"
+    ]
+  },
+  "technical": {
+    "format": "MP3",
+    "quality": "High quality Japanese pronunciation",
+    "duration": "1-2 seconds per file",
+    "encoding": "UTF-8",
+    "compatibility": "All modern browsers"
+  }
+}

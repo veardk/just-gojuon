@@ -1,0 +1,312 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-gray-200;
+  }
+
+  body {
+    @apply bg-background-primary text-text-primary;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  .font-japanese {
+    font-family: 'Noto Sans JP', 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif;
+    font-feature-settings: "palt" 1;
+  }
+
+  .font-sans {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  .font-display {
+    font-family: 'Comfortaa', 'Nunito', sans-serif;
+  }
+}
+
+@layer components {
+  .btn-bounce {
+    @apply transition-transform duration-150 ease-in-out;
+  }
+
+  .btn-bounce:active {
+    @apply scale-95;
+  }
+
+  .card-float {
+    @apply transition-all duration-300 ease-out;
+  }
+
+  .card-float:hover {
+    @apply -translate-y-1 shadow-float;
+  }
+
+  .kana-character {
+    @apply font-japanese font-bold select-none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-japanese-hiragana to-japanese-katakana bg-clip-text text-transparent;
+  }
+
+  .glass {
+    @apply bg-white/80 backdrop-blur-sm border border-white/20;
+  }
+
+  .pulse-soft {
+    animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes pulse-soft {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.8;
+    }
+  }
+
+  .float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  .wiggle {
+    animation: wiggle 1s ease-in-out infinite;
+  }
+
+  @keyframes wiggle {
+    0%, 100% {
+      transform: rotate(-3deg);
+    }
+    50% {
+      transform: rotate(3deg);
+    }
+  }
+  
+  /* 弹跳进入动画 */
+  .bounce-in {
+    animation: bounceIn 0.6s ease-out;
+  }
+  
+  @keyframes bounceIn {
+    0% {
+      opacity: 0;
+      transform: scale(0.3);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+    70% {
+      transform: scale(0.9);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  /* 淡入动画 */
+  .fade-in {
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* 滑入动画 */
+  .slide-in-right {
+    animation: slideInRight 0.5s ease-out;
+  }
+  
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(100px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  /* 缩放进入动画 */
+  .scale-in {
+    animation: scaleIn 0.3s ease-out;
+  }
+  
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}
+
+/* 工具类 */
+@layer utilities {
+  /* 文字选择样式 */
+  .select-none {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  /* 滚动条样式 */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(203 213 225) transparent;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: rgb(203 213 225);
+    border-radius: 3px;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(148 163 184);
+  }
+  
+  /* 隐藏滚动条 */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* 文字省略 */
+  .text-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  /* 多行文字省略 */
+  .text-ellipsis-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+  
+  .text-ellipsis-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+  
+  /* 居中布局 */
+  .center {
+    @apply flex items-center justify-center;
+  }
+  
+  /* 绝对居中 */
+  .absolute-center {
+    @apply absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2;
+  }
+  
+  /* 响应式隐藏 */
+  .hide-mobile {
+    @apply hidden sm:block;
+  }
+  
+  .hide-desktop {
+    @apply block sm:hidden;
+  }
+  
+  /* 安全区域 */
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  .safe-left {
+    padding-left: env(safe-area-inset-left);
+  }
+  
+  .safe-right {
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+/* 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+  .dark {
+    /* 深色模式下的样式调整 */
+    --tw-bg-opacity: 1;
+    background-color: rgb(17 24 39 / var(--tw-bg-opacity));
+    color: rgb(243 244 246 / var(--tw-text-opacity));
+  }
+}
+
+/* 打印样式 */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-only {
+    display: block !important;
+  }
+}
+
+/* 高对比度模式支持 */
+@media (prefers-contrast: high) {
+  .high-contrast {
+    filter: contrast(1.2);
+  }
+}
+
+/* 减少动画模式支持 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
