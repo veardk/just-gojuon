@@ -3,14 +3,6 @@
 [English](#english) | [中文](#中文)
 
 ## 中文
-### ✨ 特色功能
-
-- 🎨 **现代日系设计** - 美观大方的卡通风格界面
-- 🌏 **多语言支持** - 中英文无缝切换
-- 📱 **响应式设计** - 完美适配各种设备
-- 🎯 **多种练习模式** - 识别训练、听力训练、打字训练
-- 🎵 **音频支持** - 标准日语发音
-- 💾 **本地存储** - 练习配置自动保存
 
 ### 🎯 练习模式
 
@@ -51,15 +43,6 @@ npm start
 ---
 
 ## English
-
-### ✨ Features
-
-- 🎨 **Modern Japanese Design** - Beautiful cartoon-style interface
-- 🌏 **Bilingual Support** - Seamless Chinese/English switching
-- 📱 **Responsive Design** - Perfect for all devices
-- 🎯 **Multiple Practice Modes** - Recognition, Listening, Typing training
-- 🎵 **Audio Support** - Standard Japanese pronunciation
-- 💾 **Local Storage** - Auto-save practice configurations
 
 ### 🎯 Practice Modes
 
