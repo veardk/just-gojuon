@@ -354,11 +354,10 @@
           </a>
      	</div>
      </div>
-	<script src="js/jquery-1.8.3.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script src="js/jquery-ui-1.10.3.custom.min.js"></script>
     <script src="js/flatui-radio.js"></script>
 	<script>
-	// 多语言支持
 	const translations = {
 		zh: {
 			chars: '字符',
@@ -392,29 +391,21 @@
 		}
 	};
 
-	// 获取当前语言（默认中文）
 	function getCurrentLanguage() {
 		const urlParams = new URLSearchParams(window.location.search);
 		return urlParams.get('lang') || 'zh';
 	}
 
-	// 更新页面文本
 	function updatePageTexts() {
 		const lang = getCurrentLanguage();
 		const t = translations[lang];
 
-		// 更新页面标题
 		document.title = t.title;
-
-		// 更新界面文本
 		$('label').each(function() {
 			const $this = $(this);
 			if ($this.find('#num_of_chars').length) {
-				// 保持当前值，不要重置为100
 				const currentValue = $('#num_of_chars').val() || 100;
-				console.log('updatePageTexts: current value before update:', currentValue);
 				$this.html(`<input class='chars' type="number" name="num_of_chars_name" id="num_of_chars" value="${currentValue}"> ${t.chars}`);
-				console.log('updatePageTexts: value after update:', $('#num_of_chars').val());
 			}
 		});
 
@@ -436,17 +427,11 @@
 
 		$('.btn-start .start').text(t.start);
 		$('a[href="/"]').html(`<span class="fui-arrow-left"></span> ${t.returnToMain}`);
-
-		// 更新游戏中的返回按钮
 		$('.btn-return-home .return-text').text(t.returnToMain);
-
-		// 更新表格标题
 		$('#false-chars th').eq(0).text(t.no);
 		$('#false-chars th').eq(1).text(t.kana);
 		$('#false-chars th').eq(2).text(t.romaji);
 		$('#false-chars th').eq(3).text(t.count);
-
-		// 更新游戏标题（如果存在）
 		$('.game-header h3').text(t.title);
 	}
 
@@ -454,73 +439,42 @@
 	$(document).ready(function() {
 		const urlParams = new URLSearchParams(window.location.search);
 
-		// 先设置字符数量
-		const chars = urlParams.get('chars');
-		console.log('URL chars parameter:', chars);
-		if (chars && !isNaN(chars)) {
-			const charCount = parseInt(chars);
-			console.log('Setting character count to:', charCount);
-			$('#num_of_chars').val(charCount);
-			console.log('Character count after setting:', $('#num_of_chars').val());
-		}
-
-		// 然后更新页面文本（这样会保持我们刚设置的值）
-		updatePageTexts();
-
-		// 设置假名类型
-		const kanaType = urlParams.get('kana');
-		if (kanaType === 'katakana') {
-			$('#katakana').prop('checked', true);
-			$('#hiragana').prop('checked', false);
-			$('#all').prop('checked', false);
-		} else if (kanaType === 'all') {
-			// 选择混合模式
-			$('#all').prop('checked', true);
-			$('#hiragana').prop('checked', false);
-			$('#katakana').prop('checked', false);
-			// 设置一个标记表示这是混合模式
-			window.mixedMode = true;
-		} else {
-			$('#hiragana').prop('checked', true);
-			$('#katakana').prop('checked', false);
-			$('#all').prop('checked', false);
-		}
-
-		// 设置振假名显示
-		const furigana = urlParams.get('furigana');
-		if (furigana === 'false') {
-			$('#furigana').prop('checked', false);
-		} else {
-			$('#furigana').prop('checked', true);
-		}
-
-		// 如果有参数，自动开始游戏
-		console.log('Checking for auto-start parameters...');
-		console.log('Has kana param:', urlParams.has('kana'));
-		console.log('Has chars param:', urlParams.has('chars'));
-
 		if (urlParams.has('kana') || urlParams.has('chars')) {
-			console.log('Auto-starting game...');
+			const chars = urlParams.get('chars');
+			if (chars && !isNaN(chars)) {
+				$('#num_of_chars').val(parseInt(chars));
+			}
 
-			// 隐藏设置界面和标题
-			$('.buttons-start').hide();
-			$('.title').hide();
+			const kanaType = urlParams.get('kana');
+			if (kanaType === 'katakana') {
+				$('#katakana').prop('checked', true);
+				$('#hiragana').prop('checked', false);
+				$('#all').prop('checked', false);
+			} else if (kanaType === 'all') {
+				$('#all').prop('checked', true);
+				$('#hiragana').prop('checked', false);
+				$('#katakana').prop('checked', false);
+				window.mixedMode = true;
+			} else {
+				$('#hiragana').prop('checked', true);
+				$('#katakana').prop('checked', false);
+				$('#all').prop('checked', false);
+			}
 
-			// 添加一个简洁的标题
-			const lang = getCurrentLanguage();
-			const t = translations[lang];
-			$('.main-container').prepend(`<div class="game-header" style="text-align: center; margin: 20px 0; color: #34495e;"><h3>${t.title}</h3></div>`);
+			const furigana = urlParams.get('furigana');
+			if (furigana === 'false') {
+				$('#furigana').prop('checked', false);
+			} else {
+				$('#furigana').prop('checked', true);
+			}
 
-			// 直接调用开始函数，而不是点击按钮
 			setTimeout(function() {
-				console.log('Calling btn_start function...');
-				console.log('Character count before start:', $('#num_of_chars').val());
 				btn_start();
-			}, 1000); // 增加延迟时间
-		} else {
-			console.log('No auto-start parameters found, staying on settings page');
+			}, 500);
+			return;
 		}
 
+		updatePageTexts();
 
 	});
 
