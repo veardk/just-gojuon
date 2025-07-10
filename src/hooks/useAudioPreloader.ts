@@ -6,10 +6,12 @@ import { audioCache } from '@/utils/audio-utils';
 interface UseAudioPreloaderOptions {
   enabled?: boolean;
   characters?: KanaCharacter[];
+  maxConcurrent?: number; // 最大并发数
+  priority?: 'immediate' | 'lazy'; // 预加载优先级
 }
 
 export const useAudioPreloader = (options: UseAudioPreloaderOptions = {}) => {
-  const { enabled = true, characters = [] } = options;
+  const { enabled = true, characters = [], maxConcurrent = 3, priority = 'lazy' } = options;
   const [isLoading, setIsLoading] = useState(false);
   const [loadedCount, setLoadedCount] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
@@ -23,30 +25,27 @@ export const useAudioPreloader = (options: UseAudioPreloaderOptions = {}) => {
       setTotalCount(characters.length);
 
       const urls = characters.map(char => getKanaAudioUrl(char));
-      
-      try {
-        // 预加载所有音频，但不等待全部完成
-        const promises = urls.map(async (url, index) => {
-          try {
-            await audioCache.getAudio(url);
-            setLoadedCount(prev => prev + 1);
-          } catch (error) {
-            console.warn(`Failed to preload audio: ${url}`, error);
-            setLoadedCount(prev => prev + 1); // 即使失败也要增加计数
-          }
-        });
 
-        await Promise.all(promises);
-        console.log(`Audio preloading completed: ${urls.length} files processed`);
+      try {
+        if (priority === 'lazy') {
+          // 延迟预加载，避免阻塞页面加载
+          setTimeout(async () => {
+            await audioCache.preloadAudios(urls, maxConcurrent);
+            setIsLoading(false);
+          }, 1000); // 延迟1秒开始预加载
+        } else {
+          // 立即预加载
+          await audioCache.preloadAudios(urls, maxConcurrent);
+          setIsLoading(false);
+        }
       } catch (error) {
         console.error('Audio preloading failed:', error);
-      } finally {
         setIsLoading(false);
       }
     };
 
     preloadAudios();
-  }, [enabled, characters]);
+  }, [enabled, characters, maxConcurrent, priority]);
 
   const playAudio = async (character: KanaCharacter): Promise<void> => {
     const url = getKanaAudioUrl(character);

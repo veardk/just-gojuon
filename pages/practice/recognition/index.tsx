@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { useLanguage } from '@/stores/app-store';
+import { useAudioPreloader } from '@/hooks/useAudioPreloader';
 import Layout from '@/components/layout/Layout';
 import Container from '@/components/ui/Container';
 import Card from '@/components/ui/Card';
@@ -31,6 +32,38 @@ const RecognitionPracticePage: React.FC = () => {
   const [config, setConfig] = useState<RecognitionConfig>({
     selectedUnits: ['basic'],
     questionCount: 50
+  });
+
+  // 只预加载选中单元的音频
+  const selectedCharacters = useMemo(() => {
+    return config.selectedUnits.flatMap(unitId => {
+      const kanaData = KANA_DATA[unitId as keyof typeof KANA_DATA];
+      return kanaData || [];
+    });
+  }, [config.selectedUnits]);
+
+  // 智能音频预加载：只预加载选中的单元，延迟加载
+  useAudioPreloader({
+    enabled: selectedCharacters.length > 0,
+    characters: selectedCharacters,
+    maxConcurrent: 2,
+    priority: 'lazy'
+  });
+
+  // 只预加载选中单元的音频
+  const selectedCharacters = useMemo(() => {
+    return config.selectedUnits.flatMap(unitId => {
+      const kanaData = KANA_DATA[unitId as keyof typeof KANA_DATA];
+      return kanaData || [];
+    });
+  }, [config.selectedUnits]);
+
+  // 智能音频预加载：只预加载选中的单元，延迟加载
+  useAudioPreloader({
+    enabled: selectedCharacters.length > 0,
+    characters: selectedCharacters,
+    maxConcurrent: 2,
+    priority: 'lazy'
   });
   const handleUnitToggle = (unitId: string) => {
     setConfig(prev => ({

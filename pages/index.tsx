@@ -1,10 +1,9 @@
-import React, { useEffect, useMemo } from 'react';
+import React from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { KanaType, KanaCategory } from '@/types/kana';
 import { useLanguage } from '@/stores/app-store';
 import { KANA_BY_CATEGORY } from '@/constants/kana';
-import { useAudioPreloader } from '@/hooks/useAudioPreloader';
 import Layout from '@/components/layout/Layout';
 import Container from '@/components/ui/Container';
 import Button from '@/components/ui/Button';
@@ -14,16 +13,7 @@ const HomePage: React.FC = () => {
   const router = useRouter();
   const language = useLanguage();
 
-  // 收集所有需要预加载的音频
-  const allCharacters = useMemo(() => {
-    return Object.values(KANA_BY_CATEGORY).flat();
-  }, []);
-
-  // 预加载所有音频
-  useAudioPreloader({
-    enabled: true,
-    characters: allCharacters
-  });
+  // 移除音频预加载，改为按需加载以提升页面加载速度
   const practiceOptions = [
     {
       id: 'recognition',

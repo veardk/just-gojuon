@@ -186,21 +186,28 @@ class AudioCache {
           console.warn(`Audio loading timeout for: ${url}`);
           onError(new Event('timeout'));
         }
-      }, 10000); // 10秒超时
+      }, 3000); // 3秒超时，更快失败
     });
   }
 
-  async preloadAudios(urls: string[]): Promise<void> {
-    const promises = urls.map(async (url) => {
-      try {
-        await this.getAudio(url);
-        console.log(`Successfully preloaded: ${url}`);
-      } catch (error) {
-        console.warn(`Failed to preload audio: ${url}`, error);
-        // 不抛出错误，继续加载其他音频
-      }
-    });
-    await Promise.all(promises);
+  async preloadAudios(urls: string[], maxConcurrent: number = 3): Promise<void> {
+    // 限制并发数量，避免网络阻塞
+    const chunks = [];
+    for (let i = 0; i < urls.length; i += maxConcurrent) {
+      chunks.push(urls.slice(i, i + maxConcurrent));
+    }
+
+    for (const chunk of chunks) {
+      const promises = chunk.map(async (url) => {
+        try {
+          await this.getAudio(url);
+        } catch (error) {
+          console.warn(`Failed to preload audio: ${url}`, error);
+          // 不抛出错误，继续加载其他音频
+        }
+      });
+      await Promise.all(promises);
+    }
   }
 
   async playAudio(url: string, onEnded?: () => void): Promise<void> {
