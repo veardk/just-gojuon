@@ -305,7 +305,7 @@
 			<a id="btn-counter" class="btn btn-huge btn-info btn-embossed mlm">
  				<span class='fui-checkbox-checked'></span> &nbsp; <span class='score'>0 / 100</span>
 			</a>
-			<a href="/just-gojuon/practice/typing/" class="btn btn-large btn-default btn-embossed mlm btn-return-home">
+			<a href="#" onclick="returnToMain()" class="btn btn-large btn-default btn-embossed mlm btn-return-home">
 				<span class="fui-arrow-left"></span>
 				<span class="return-text">返回</span>
 			</a>
@@ -391,6 +391,20 @@
 		const urlParams = new URLSearchParams(window.location.search);
 		return urlParams.get('lang') || 'zh';
 	}
+
+		function returnToMain() {
+			// 检测是否在生产环境（GitHub Pages）
+			const isProduction = window.location.hostname.includes('github.io');
+			const basePath = isProduction ? '/just-gojuon' : '';
+
+			// 尝试关闭当前窗口（如果是弹出窗口）
+			if (window.opener) {
+				window.close();
+			} else {
+				// 如果不是弹出窗口，跳转到首页
+				window.location.href = basePath + '/';
+			}
+		}
 
 	function updatePageTexts() {
 		const lang = getCurrentLanguage();

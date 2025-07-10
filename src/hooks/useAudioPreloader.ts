@@ -37,6 +37,7 @@ export const useAudioPreloader = (options: UseAudioPreloaderOptions = {}) => {
         });
 
         await Promise.all(promises);
+        console.log(`Audio preloading completed: ${urls.length} files processed`);
       } catch (error) {
         console.error('Audio preloading failed:', error);
       } finally {

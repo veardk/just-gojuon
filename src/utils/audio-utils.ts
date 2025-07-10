@@ -154,26 +154,52 @@ class AudioCache {
       const onCanPlay = () => {
         audio.removeEventListener('canplaythrough', onCanPlay);
         audio.removeEventListener('error', onError);
+        audio.removeEventListener('loadeddata', onLoadedData);
         resolve(audio);
       };
 
-      const onError = () => {
+      const onLoadedData = () => {
+        // 如果 canplaythrough 没有触发，但 loadeddata 触发了，也认为加载成功
         audio.removeEventListener('canplaythrough', onCanPlay);
         audio.removeEventListener('error', onError);
+        audio.removeEventListener('loadeddata', onLoadedData);
+        resolve(audio);
+      };
+
+      const onError = (e: Event) => {
+        audio.removeEventListener('canplaythrough', onCanPlay);
+        audio.removeEventListener('error', onError);
+        audio.removeEventListener('loadeddata', onLoadedData);
+        console.error(`Audio load error for ${url}:`, e);
         reject(new Error(`Failed to load audio: ${url}`));
       };
 
       audio.addEventListener('canplaythrough', onCanPlay);
+      audio.addEventListener('loadeddata', onLoadedData);
       audio.addEventListener('error', onError);
       audio.src = url;
       audio.load();
+
+      // 添加超时处理，避免无限等待
+      setTimeout(() => {
+        if (!this.cache.has(url)) {
+          console.warn(`Audio loading timeout for: ${url}`);
+          onError(new Event('timeout'));
+        }
+      }, 10000); // 10秒超时
     });
   }
 
   async preloadAudios(urls: string[]): Promise<void> {
-    const promises = urls.map(url => this.getAudio(url).catch(error => {
-      console.warn(`Failed to preload audio: ${url}`, error);
-    }));
+    const promises = urls.map(async (url) => {
+      try {
+        await this.getAudio(url);
+        console.log(`Successfully preloaded: ${url}`);
+      } catch (error) {
+        console.warn(`Failed to preload audio: ${url}`, error);
+        // 不抛出错误，继续加载其他音频
+      }
+    });
     await Promise.all(promises);
   }
 
