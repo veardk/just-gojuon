@@ -1,5 +1,6 @@
 import { KanaCharacter } from '@/types/kana';
 import { getKanaAudioUrl } from '@/utils/kana-utils';
+import { perfMonitor } from '@/utils/performance-monitor';
 
 /**
  * 音频服务 - 提供高效的音频管理和播放功能
@@ -17,11 +18,15 @@ class AudioService {
    */
   async playAudio(character: KanaCharacter): Promise<void> {
     const url = getKanaAudioUrl(character);
+    perfMonitor.start(`audio-play-${character.romaji}`);
+
     try {
       const audio = await this.getAudio(url);
       audio.currentTime = 0;
       await audio.play();
+      perfMonitor.end(`audio-play-${character.romaji}`);
     } catch (error) {
+      perfMonitor.end(`audio-play-${character.romaji}`);
       console.warn(`Failed to play audio for ${character.romaji}:`, error);
       // 静默失败，不影响用户体验
     }
