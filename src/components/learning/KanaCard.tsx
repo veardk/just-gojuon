@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { KanaCharacter, KanaType } from '@/types/kana';
 import { CardState, BaseComponentProps } from '@/types/common';
 import { cn } from '@/utils/common-utils';
-import { getKanaCategoryColor, getKanaDisplayText, getKanaAudioUrl } from '@/utils/kana-utils';
-import { audioCache } from '@/utils/audio-utils';
+import { getKanaCategoryColor, getKanaDisplayText } from '@/utils/kana-utils';
+import { audioService } from '@/services/audio-service';
 import Card from '@/components/ui/Card';
 interface KanaCardProps extends BaseComponentProps {
   character: KanaCharacter;
@@ -64,18 +64,14 @@ const KanaCard: React.FC<KanaCardProps> = ({
   const handleAudioPlay = async (e: React.MouseEvent) => {
     e.stopPropagation();
     if (isPlaying) return;
+
+    setIsPlaying(true);
     try {
-      setIsPlaying(true);
-      const audioUrl = getKanaAudioUrl(character);
-
-      // 使用音频缓存直接播放，并监听播放结束
-      await audioCache.playAudio(audioUrl, () => {
-        setIsPlaying(false);
-      });
-
+      await audioService.playAudio(character);
     } catch (error) {
-      setIsPlaying(false);
       console.warn('音频播放失败:', error);
+    } finally {
+      setIsPlaying(false);
     }
   };
   const hiraganaText = getKanaDisplayText(character, KanaType.HIRAGANA);

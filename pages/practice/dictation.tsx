@@ -6,7 +6,7 @@ import { DictationDuration } from '@/types/dictation';
 import { useLanguage } from '@/stores/app-store';
 import { useDictationStore, useDictationConfig } from '@/stores/dictation-store';
 import { CATEGORY_LABELS, KANA_BY_CATEGORY } from '@/constants/kana';
-import { useAudioPreloader } from '@/hooks/useAudioPreloader';
+import { audioService } from '@/services/audio-service';
 import Layout from '@/components/layout/Layout';
 import Container from '@/components/ui/Container';
 import Button from '@/components/ui/Button';
@@ -26,20 +26,22 @@ const DictationConfigPage: React.FC = () => {
   const config = useDictationConfig();
   const { updateConfig, updateAudioSettings, startDictation } = useDictationStore();
 
-  // 只预加载选中类别的音频，使用延迟加载策略
+  // 智能音频预加载：只预加载选中类别的音频
   const selectedCharacters = useMemo(() => {
     return config.selectedCategories.flatMap(category =>
       KANA_BY_CATEGORY[category] || []
     );
   }, [config.selectedCategories]);
 
-  // 智能音频预加载：只预加载选中的类别，延迟加载，限制并发
-  useAudioPreloader({
-    enabled: selectedCharacters.length > 0,
-    characters: selectedCharacters,
-    maxConcurrent: 2, // 限制并发数
-    priority: 'lazy' // 延迟加载
-  });
+  // 使用音频服务进行智能预加载
+  React.useEffect(() => {
+    if (selectedCharacters.length > 0) {
+      // 延迟预加载，避免阻塞页面
+      setTimeout(() => {
+        audioService.preloadAudios(selectedCharacters);
+      }, 500);
+    }
+  }, [selectedCharacters]);
   const durationOptions: DictationDuration[] = [1, 3, 5, 10, 15, 30, 60];
   const handleStartDictation = () => {
     startDictation();
