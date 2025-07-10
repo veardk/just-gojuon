@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { KanaType, KanaCategory } from '@/types/kana';
 import { useLanguage } from '@/stores/app-store';
 import { KANA_BY_CATEGORY } from '@/constants/kana';
+import { useAudioPreloader } from '@/hooks/useAudioPreloader';
 import Layout from '@/components/layout/Layout';
 import Container from '@/components/ui/Container';
 import Button from '@/components/ui/Button';
@@ -12,6 +13,17 @@ import KanaGrid from '@/components/learning/KanaGrid';
 const HomePage: React.FC = () => {
   const router = useRouter();
   const language = useLanguage();
+
+  // 收集所有需要预加载的音频
+  const allCharacters = useMemo(() => {
+    return Object.values(KANA_BY_CATEGORY).flat();
+  }, []);
+
+  // 预加载所有音频
+  const { isLoading, progress } = useAudioPreloader({
+    enabled: true,
+    characters: allCharacters
+  });
   const practiceOptions = [
     {
       id: 'recognition',
@@ -63,11 +75,29 @@ const HomePage: React.FC = () => {
             {language === 'zh' ? '学习50音' : 'Learn Japanese Kana'}
           </h1>
           <p className="text-xl text-text-secondary max-w-2xl mx-auto mb-8">
-            {language === 'zh' 
+            {language === 'zh'
               ? '通过有趣的互动练习掌握平假名和片假名，开启你的日语学习之旅'
               : 'Master Hiragana and Katakana through fun interactive exercises and start your Japanese learning journey'
             }
           </p>
+
+          {/* 音频加载进度指示器 */}
+          {isLoading && (
+            <div className="max-w-md mx-auto mb-6">
+              <div className="flex items-center justify-between text-sm text-text-secondary mb-2">
+                <span>
+                  {language === 'zh' ? '正在加载音频...' : 'Loading audio...'}
+                </span>
+                <span>{Math.round(progress)}%</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div
+                  className="bg-primary-500 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+            </div>
+          )}
         </div>
         {}
         <div className="mb-12">

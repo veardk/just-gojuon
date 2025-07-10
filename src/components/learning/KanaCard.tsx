@@ -3,6 +3,7 @@ import { KanaCharacter, KanaType } from '@/types/kana';
 import { CardState, BaseComponentProps } from '@/types/common';
 import { cn } from '@/utils/common-utils';
 import { getKanaCategoryColor, getKanaDisplayText, getKanaAudioUrl } from '@/utils/kana-utils';
+import { audioCache } from '@/utils/audio-utils';
 import Card from '@/components/ui/Card';
 interface KanaCardProps extends BaseComponentProps {
   character: KanaCharacter;
@@ -61,18 +62,17 @@ const KanaCard: React.FC<KanaCardProps> = ({
     onClick?.(character);
   };
   const handleAudioPlay = async (e: React.MouseEvent) => {
-    e.stopPropagation(); 
+    e.stopPropagation();
     if (isPlaying) return;
     try {
       setIsPlaying(true);
       const audioUrl = getKanaAudioUrl(character);
-      const audio = new Audio(audioUrl);
-      audio.onended = () => setIsPlaying(false);
-      audio.onerror = () => {
+
+      // 使用音频缓存直接播放，并监听播放结束
+      await audioCache.playAudio(audioUrl, () => {
         setIsPlaying(false);
-        console.warn('音频播放失败:', audioUrl);
-      };
-      await audio.play();
+      });
+
     } catch (error) {
       setIsPlaying(false);
       console.warn('音频播放失败:', error);

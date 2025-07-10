@@ -114,6 +114,99 @@ export const generateTTSAudio = async (text: string, language: string = 'ja-JP')
   const basePath = process.env.NODE_ENV === 'production' ? '/just-gojuon' : '';
   return `${basePath}/sounds/generated/${text}.mp3`;
 };
+
+// 全局音频缓存
+class AudioCache {
+  private cache: Map<string, HTMLAudioElement> = new Map();
+  private loadingPromises: Map<string, Promise<HTMLAudioElement>> = new Map();
+
+  async getAudio(url: string): Promise<HTMLAudioElement> {
+    // 如果已经缓存，直接返回
+    if (this.cache.has(url)) {
+      return this.cache.get(url)!;
+    }
+
+    // 如果正在加载，等待加载完成
+    if (this.loadingPromises.has(url)) {
+      return this.loadingPromises.get(url)!;
+    }
+
+    // 开始加载音频
+    const loadPromise = this.loadAudio(url);
+    this.loadingPromises.set(url, loadPromise);
+
+    try {
+      const audio = await loadPromise;
+      this.cache.set(url, audio);
+      this.loadingPromises.delete(url);
+      return audio;
+    } catch (error) {
+      this.loadingPromises.delete(url);
+      throw error;
+    }
+  }
+
+  private loadAudio(url: string): Promise<HTMLAudioElement> {
+    return new Promise((resolve, reject) => {
+      const audio = new Audio();
+      audio.preload = 'auto';
+
+      const onCanPlay = () => {
+        audio.removeEventListener('canplaythrough', onCanPlay);
+        audio.removeEventListener('error', onError);
+        resolve(audio);
+      };
+
+      const onError = () => {
+        audio.removeEventListener('canplaythrough', onCanPlay);
+        audio.removeEventListener('error', onError);
+        reject(new Error(`Failed to load audio: ${url}`));
+      };
+
+      audio.addEventListener('canplaythrough', onCanPlay);
+      audio.addEventListener('error', onError);
+      audio.src = url;
+      audio.load();
+    });
+  }
+
+  async preloadAudios(urls: string[]): Promise<void> {
+    const promises = urls.map(url => this.getAudio(url).catch(error => {
+      console.warn(`Failed to preload audio: ${url}`, error);
+    }));
+    await Promise.all(promises);
+  }
+
+  async playAudio(url: string, onEnded?: () => void): Promise<void> {
+    try {
+      const audio = await this.getAudio(url);
+      // 重置播放位置
+      audio.currentTime = 0;
+
+      // 如果提供了结束回调，添加事件监听器
+      if (onEnded) {
+        const handleEnded = () => {
+          audio.removeEventListener('ended', handleEnded);
+          onEnded();
+        };
+        audio.addEventListener('ended', handleEnded);
+      }
+
+      await audio.play();
+    } catch (error) {
+      console.error('Failed to play audio:', url, error);
+      throw error;
+    }
+  }
+
+  clear(): void {
+    this.cache.clear();
+    this.loadingPromises.clear();
+  }
+}
+
+// 全局音频缓存实例
+export const audioCache = new AudioCache();
 export const convertAudioFormat = async (
   inputUrl: string, 
   outputFormat: 'mp3' | 'wav' | 'ogg'
