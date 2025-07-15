@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { useLanguage } from '@/stores/app-store';
-import { audioService } from '@/services/audio-service';
+import { useAudioPreloader } from '@/hooks/useAudioPreloader';
 import Layout from '@/components/layout/Layout';
 import Container from '@/components/ui/Container';
 import Card from '@/components/ui/Card';
@@ -35,24 +35,6 @@ const RecognitionPracticePage: React.FC = () => {
   });
 
   // 智能音频预加载：只预加载选中单元的音频
-  const selectedCharacters = useMemo(() => {
-    return config.selectedUnits.flatMap(unitId => {
-      const kanaData = KANA_DATA[unitId as keyof typeof KANA_DATA];
-      return kanaData || [];
-    });
-  }, [config.selectedUnits]);
-
-  // 使用音频服务进行智能预加载
-  React.useEffect(() => {
-    if (selectedCharacters.length > 0) {
-      // 延迟预加载，避免阻塞页面
-      setTimeout(() => {
-        audioService.preloadAudios(selectedCharacters);
-      }, 500);
-    }
-  }, [selectedCharacters]);
-
-  // 只预加载选中单元的音频
   const selectedCharacters = useMemo(() => {
     return config.selectedUnits.flatMap(unitId => {
       const kanaData = KANA_DATA[unitId as keyof typeof KANA_DATA];

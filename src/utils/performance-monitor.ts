@@ -57,7 +57,7 @@ class PerformanceMonitor {
    */
   printAllStats(): void {
     console.log('📊 Performance Statistics:');
-    for (const [label, values] of this.metrics.entries()) {
+    for (const [label] of this.metrics.entries()) {
       const stats = this.getStats(label);
       if (stats) {
         console.log(`  ${label}:`, {

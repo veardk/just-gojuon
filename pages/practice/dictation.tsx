@@ -1,11 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { KanaCategory } from '@/types/kana';
 import { DictationDuration } from '@/types/dictation';
 import { useLanguage } from '@/stores/app-store';
 import { useDictationStore, useDictationConfig } from '@/stores/dictation-store';
-import { CATEGORY_LABELS, KANA_BY_CATEGORY } from '@/constants/kana';
+import { KANA_BY_CATEGORY } from '@/constants/kana';
 import { audioService } from '@/services/audio-service';
 import Layout from '@/components/layout/Layout';
 import Container from '@/components/ui/Container';

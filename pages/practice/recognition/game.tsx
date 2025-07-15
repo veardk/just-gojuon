@@ -6,7 +6,7 @@ import Layout from '@/components/layout/Layout';
 import Container from '@/components/ui/Container';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
-import { CheckCircle, XCircle, RotateCcw, Home, Clock } from 'lucide-react';
+import { CheckCircle, RotateCcw, Home, Clock } from 'lucide-react';
 import { KANA_BY_CATEGORY } from '@/constants/kana';
 import { KanaCategory } from '@/types/kana';
 const KANA_DATA = {
@@ -57,7 +57,7 @@ const RecognitionGamePage: React.FC = () => {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   useEffect(() => {
     if (!router.isReady) return;
-    const { units, count, lang } = router.query;
+    const { units, count } = router.query;
     if (!units || !count) {
       router.push('/practice/recognition');
       return;

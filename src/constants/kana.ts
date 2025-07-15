@@ -1,5 +1,4 @@
 import { KanaCharacter, KanaCategory } from '@/types/kana';
-import { Locale } from '@/types/common';
 export const KANA_DATA: KanaCharacter[] = [
   { id: 'a', hiragana: 'あ', katakana: 'ア', romaji: 'a', category: KanaCategory.SEION, difficulty: 1, strokeCount: 3 },
   { id: 'i', hiragana: 'い', katakana: 'イ', romaji: 'i', category: KanaCategory.SEION, difficulty: 1, strokeCount: 2 },
@@ -104,7 +103,7 @@ export const KANA_DATA: KanaCharacter[] = [
   { id: 'byo', hiragana: 'びょ', katakana: 'ビョ', romaji: 'byo', category: KanaCategory.YOON, difficulty: 3, strokeCount: 7 },
   { id: 'pya', hiragana: 'ぴゃ', katakana: 'ピャ', romaji: 'pya', category: KanaCategory.YOON, difficulty: 3, strokeCount: 7 },
   { id: 'pyu', hiragana: 'ぴゅ', katakana: 'ピュ', romaji: 'pyu', category: KanaCategory.YOON, difficulty: 3, strokeCount: 7 },
-  { id: 'pyo', hiragana: 'ぴょ', katakana: 'ピョ', romaji: 'pyo', category: KanaCategory.YOON, difficulty: 3, strokeCount: 7 },
+  { id: 'pyo', hiragana: 'ぴょ', katakana: 'ピョ', romaji: 'pyo', category: KanaCategory.YOON, difficulty: 3, strokeCount: 7 }
 ];
 export const KANA_BY_CATEGORY = {
   [KanaCategory.SEION]: KANA_DATA.filter(k => k.category === KanaCategory.SEION),

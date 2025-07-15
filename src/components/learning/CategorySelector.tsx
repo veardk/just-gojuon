@@ -1,6 +1,6 @@
 import React from 'react';
 import { KanaCategory } from '@/types/kana';
-import { BaseComponentProps, Locale } from '@/types/common';
+import { BaseComponentProps } from '@/types/common';
 import { cn } from '@/utils/common-utils';
 import { CATEGORY_LABELS, KANA_BY_CATEGORY } from '@/constants/kana';
 import { useLanguage } from '@/stores/app-store';

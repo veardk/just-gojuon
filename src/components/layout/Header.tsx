@@ -72,7 +72,7 @@ const Header: React.FC<HeaderProps> = ({ className, ...props }) => {
                   const parent = target.parentElement;
                   if (parent) {
                     const fallback = document.createElement('div');
-                    fallback.className = "w-32 h-32 md:w-36 md:h-36 bg-gradient-to-br from-japanese-hiragana to-japanese-katakana rounded-lg flex items-center justify-center";
+                    fallback.className = 'w-32 h-32 md:w-36 md:h-36 bg-gradient-to-br from-japanese-hiragana to-japanese-katakana rounded-lg flex items-center justify-center';
                     fallback.innerHTML = '<span class="text-white font-bold text-4xl md:text-5xl">五</span>';
                     parent.appendChild(fallback);
                   }

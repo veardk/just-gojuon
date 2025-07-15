@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
-import { KanaCharacter, KanaCategory, KanaType, PracticeQuestion } from '@/types/kana';
+import { persist } from 'zustand/middleware';
+import { KanaCategory, KanaType, PracticeQuestion } from '@/types/kana';
 import { STORAGE_KEYS } from '@/constants/app';
 import { getKanaByCategory, generatePracticeOptions, shuffleArray } from '@/utils/kana-utils';
 interface PracticeState {
@@ -126,7 +126,7 @@ export const usePracticeStore = create<PracticeState>()(
           questionIndex: nextIndex,
           currentQuestion: questions[nextIndex] || null
         });
-      },
+      }
     }),
     {
       name: STORAGE_KEYS.PRACTICE_CONFIG

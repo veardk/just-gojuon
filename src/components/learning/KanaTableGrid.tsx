@@ -2,7 +2,7 @@ import React from 'react';
 import { KanaType, KanaCategory, KanaCharacter } from '@/types/kana';
 import { KANA_BY_CATEGORY } from '@/constants/kana';
 import { getCategoryLayout } from '@/constants/kana-layout';
-import { cn } from '@/utils/common-utils';
+
 import KanaCard from './KanaCard';
 interface KanaTableGridProps {
   category: KanaCategory;

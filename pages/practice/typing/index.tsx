@@ -10,7 +10,6 @@ import {
   Eye,
   Keyboard,
   Target,
-  RotateCcw,
   ExternalLink,
   Settings,
   CheckCircle

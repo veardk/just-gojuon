@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
-import { Locale, UserSettings } from '@/types/common';
+import { persist } from 'zustand/middleware';
+import { UserSettings } from '@/types/common';
 import { DEFAULT_SETTINGS, STORAGE_KEYS } from '@/constants/app';
 import { KanaCategory } from '@/types/kana';
 interface AppState {
@@ -21,7 +21,7 @@ interface AppState {
 }
 export const useAppStore = create<AppState>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       settings: DEFAULT_SETTINGS,
       isLoading: false,
       isSidebarOpen: false,

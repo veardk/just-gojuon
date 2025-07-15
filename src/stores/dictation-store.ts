@@ -1,12 +1,11 @@
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { persist } from 'zustand/middleware';
 import {
   DictationConfig,
   DictationState,
   DictationStats,
   AudioSettings,
   AudioPlayItem,
-  DictationDuration,
   PlayedAudioRecord
 } from '@/types/dictation';
 import { KanaCategory } from '@/types/kana';
@@ -303,7 +302,7 @@ export const useDictationStore = create<DictationStore>()(
       }
     }),
     {
-      name: STORAGE_KEYS.USER_SETTINGS + '-dictation',
+      name: `${STORAGE_KEYS.USER_SETTINGS}-dictation`,
       partialize: (state) => ({ 
         config: state.config,
         stats: state.stats 
