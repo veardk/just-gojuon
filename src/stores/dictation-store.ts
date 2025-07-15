@@ -83,11 +83,12 @@ export const useDictationStore = create<DictationStore>()(
       },
       generatePlaylist: () => {
         const { config } = get();
-        const allKana = config.selectedCategories.flatMap(category => 
+        const allKana = config.selectedCategories.flatMap(category =>
           getKanaByCategory(category)
         );
-        const playlist: AudioPlayItem[] = shuffleArray(allKana).map((kana, index) => ({
-          id: `audio-${index}`,
+        // 创建随机打乱的播放列表
+        const playlist: AudioPlayItem[] = shuffleArray([...allKana]).map((kana, index) => ({
+          id: `audio-${Date.now()}-${index}`, // 使用时间戳确保唯一性
           kanaId: kana.id,
           audioUrl: getKanaAudioUrl(kana),
           category: kana.category,
@@ -100,7 +101,8 @@ export const useDictationStore = create<DictationStore>()(
           state: {
             ...get().state,
             totalAudios: playlist.length,
-            currentAudioIndex: 0
+            currentAudioIndex: 0,
+            playedCount: 0 // 重置播放计数
           },
           currentItem: playlist[0] || null
         });
@@ -149,10 +151,12 @@ export const useDictationStore = create<DictationStore>()(
         });
       },
       nextAudio: () => {
-        const { state, playlist } = get();
+        const { state, playlist, config } = get();
         const nextIndex = state.currentAudioIndex + 1;
         console.log('nextAudio called, current index:', state.currentAudioIndex, 'next index:', nextIndex, 'playlist length:', playlist.length);
+
         if (nextIndex < playlist.length) {
+          // 正常移动到下一个音频
           console.log('Moving to next audio:', playlist[nextIndex]?.romaji);
           set({
             state: {
@@ -164,22 +168,31 @@ export const useDictationStore = create<DictationStore>()(
             currentItem: playlist[nextIndex] || null
           });
         } else {
-          console.log('All audios completed, stopping dictation');
-          const currentStats = get().stats;
-          const startTime = currentStats.startTime;
-          const endTime = new Date();
-          const sessionDuration = Math.floor((endTime.getTime() - startTime.getTime()) / 1000);
+          // 播放完所有音频后，重新开始循环（随机打乱）
+          console.log('All audios completed, reshuffling and continuing...');
+          const allKana = config.selectedCategories.flatMap(category =>
+            getKanaByCategory(category)
+          );
+          const newPlaylist: AudioPlayItem[] = shuffleArray([...allKana]).map((kana, index) => ({
+            id: `audio-${Date.now()}-${index}`, // 使用时间戳确保唯一性
+            kanaId: kana.id,
+            audioUrl: getKanaAudioUrl(kana),
+            category: kana.category,
+            hiragana: kana.hiragana,
+            katakana: kana.katakana,
+            romaji: kana.romaji
+          }));
+
           set({
+            playlist: newPlaylist,
             state: {
-              ...get().state,
-              isActive: false,
-              remainingTime: 0
+              ...state,
+              currentAudioIndex: 0,
+              playedCount: state.playedCount + 1,
+              currentRepeat: 0,
+              totalAudios: newPlaylist.length
             },
-            stats: {
-              ...currentStats,
-              endTime,
-              sessionDuration
-            }
+            currentItem: newPlaylist[0] || null
           });
         }
       },
@@ -206,8 +219,27 @@ export const useDictationStore = create<DictationStore>()(
               remainingTime: prevState.state.remainingTime - 1
             }
           }));
+
+          // 当时间结束时，停止练习并跳转到结果页面
           if (state.remainingTime <= 1) {
-            get().stopDictation();
+            console.log('Time is up, stopping dictation');
+            const currentStats = get().stats;
+            const startTime = currentStats.startTime;
+            const endTime = new Date();
+            const sessionDuration = Math.floor((endTime.getTime() - startTime.getTime()) / 1000);
+
+            set({
+              state: {
+                ...get().state,
+                isActive: false,
+                remainingTime: 0
+              },
+              stats: {
+                ...currentStats,
+                endTime,
+                sessionDuration
+              }
+            });
           }
         }
       },

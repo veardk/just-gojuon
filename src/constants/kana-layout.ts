@@ -2,10 +2,10 @@ import { KanaCategory } from '@/types/kana';
 export const SEION_LAYOUT = [
   ['a', 'i', 'u', 'e', 'o'],
   ['ka', 'ki', 'ku', 'ke', 'ko'],
-  ['sa', 'si', 'su', 'se', 'so'],
+  ['sa', 'shi', 'su', 'se', 'so'],
   ['ta', 'chi', 'tsu', 'te', 'to'],
   ['na', 'ni', 'nu', 'ne', 'no'],
-  ['ha', 'hi', 'hu', 'he', 'ho'],
+  ['ha', 'hi', 'fu', 'he', 'ho'],
   ['ma', 'mi', 'mu', 'me', 'mo'],
   ['ya', '', 'yu', '', 'yo'],
   ['ra', 'ri', 'ru', 're', 'ro'],
@@ -14,7 +14,7 @@ export const SEION_LAYOUT = [
 ];
 export const DAKUON_LAYOUT = [
   ['ga', 'gi', 'gu', 'ge', 'go'],
-  ['za', 'zi', 'zu', 'ze', 'zo'],
+  ['za', 'ji', 'zu', 'ze', 'zo'],
   ['da', 'di', 'du', 'de', 'do'],
   ['ba', 'bi', 'bu', 'be', 'bo']
 ];

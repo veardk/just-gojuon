@@ -12,7 +12,7 @@ export const KANA_DATA: KanaCharacter[] = [
   { id: 'ke', hiragana: 'け', katakana: 'ケ', romaji: 'ke', category: KanaCategory.SEION, difficulty: 1, strokeCount: 3 },
   { id: 'ko', hiragana: 'こ', katakana: 'コ', romaji: 'ko', category: KanaCategory.SEION, difficulty: 1, strokeCount: 2 },
   { id: 'sa', hiragana: 'さ', katakana: 'サ', romaji: 'sa', category: KanaCategory.SEION, difficulty: 1, strokeCount: 3 },
-  { id: 'shi', hiragana: 'し', katakana: 'シ', romaji: 'si', category: KanaCategory.SEION, difficulty: 2, strokeCount: 3 },
+  { id: 'shi', hiragana: 'し', katakana: 'シ', romaji: 'shi', category: KanaCategory.SEION, difficulty: 2, strokeCount: 3 },
   { id: 'su', hiragana: 'す', katakana: 'ス', romaji: 'su', category: KanaCategory.SEION, difficulty: 1, strokeCount: 2 },
   { id: 'se', hiragana: 'せ', katakana: 'セ', romaji: 'se', category: KanaCategory.SEION, difficulty: 1, strokeCount: 3 },
   { id: 'so', hiragana: 'そ', katakana: 'ソ', romaji: 'so', category: KanaCategory.SEION, difficulty: 1, strokeCount: 2 },

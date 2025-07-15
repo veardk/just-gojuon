@@ -201,7 +201,10 @@ const DictationSessionPage: React.FC = () => {
                     {state.currentAudioIndex + 1} / {state.totalAudios}
                   </div>
                   <div className="text-xs text-text-secondary">
-                    {language === 'zh' ? '音频进度' : 'Audio Progress'}
+                    {language === 'zh' ? '当前轮次' : 'Current Round'}
+                  </div>
+                  <div className="text-xs text-text-secondary mt-1">
+                    {language === 'zh' ? `已播放: ${state.playedCount}` : `Played: ${state.playedCount}`}
                   </div>
                 </div>
                 <div className="text-center">
