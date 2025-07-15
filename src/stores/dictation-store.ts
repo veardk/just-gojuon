@@ -169,9 +169,10 @@ export const useDictationStore = create<DictationStore>()(
           });
         } else {
           // 播放完所有音频后，检查是否还有剩余时间
+          console.log('All audios completed. Remaining time:', state.remainingTime, 'isActive:', state.isActive);
           if (state.remainingTime > 0 && state.isActive) {
             // 还有时间，重新开始循环（随机打乱）
-            console.log('All audios completed, reshuffling and continuing...');
+            console.log('Still have time, reshuffling and continuing...');
             const allKana = config.selectedCategories.flatMap(category =>
               getKanaByCategory(category)
             );
@@ -198,7 +199,7 @@ export const useDictationStore = create<DictationStore>()(
             });
           } else {
             // 时间已到或练习已停止，结束练习
-            console.log('Time is up or practice stopped, ending dictation');
+            console.log('Time is up or practice stopped, ending dictation. Remaining time:', state.remainingTime);
             const currentStats = get().stats;
             const startTime = currentStats.startTime;
             const endTime = new Date();
@@ -236,15 +237,17 @@ export const useDictationStore = create<DictationStore>()(
       updateTimer: () => {
         const { state } = get();
         if (state.isActive && !state.isPaused && state.remainingTime > 0) {
+          const newRemainingTime = state.remainingTime - 1;
+
           set(prevState => ({
             state: {
               ...prevState.state,
-              remainingTime: prevState.state.remainingTime - 1
+              remainingTime: newRemainingTime
             }
           }));
 
           // 当时间结束时，停止练习并跳转到结果页面
-          if (state.remainingTime <= 1) {
+          if (newRemainingTime <= 0) {
             console.log('Time is up, stopping dictation');
             const currentStats = get().stats;
             const startTime = currentStats.startTime;
