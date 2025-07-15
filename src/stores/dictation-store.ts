@@ -168,32 +168,55 @@ export const useDictationStore = create<DictationStore>()(
             currentItem: playlist[nextIndex] || null
           });
         } else {
-          // 播放完所有音频后，重新开始循环（随机打乱）
-          console.log('All audios completed, reshuffling and continuing...');
-          const allKana = config.selectedCategories.flatMap(category =>
-            getKanaByCategory(category)
-          );
-          const newPlaylist: AudioPlayItem[] = shuffleArray([...allKana]).map((kana, index) => ({
-            id: `audio-${Date.now()}-${index}`, // 使用时间戳确保唯一性
-            kanaId: kana.id,
-            audioUrl: getKanaAudioUrl(kana),
-            category: kana.category,
-            hiragana: kana.hiragana,
-            katakana: kana.katakana,
-            romaji: kana.romaji
-          }));
+          // 播放完所有音频后，检查是否还有剩余时间
+          if (state.remainingTime > 0 && state.isActive) {
+            // 还有时间，重新开始循环（随机打乱）
+            console.log('All audios completed, reshuffling and continuing...');
+            const allKana = config.selectedCategories.flatMap(category =>
+              getKanaByCategory(category)
+            );
+            const newPlaylist: AudioPlayItem[] = shuffleArray([...allKana]).map((kana, index) => ({
+              id: `audio-${Date.now()}-${index}`, // 使用时间戳确保唯一性
+              kanaId: kana.id,
+              audioUrl: getKanaAudioUrl(kana),
+              category: kana.category,
+              hiragana: kana.hiragana,
+              katakana: kana.katakana,
+              romaji: kana.romaji
+            }));
 
-          set({
-            playlist: newPlaylist,
-            state: {
-              ...state,
-              currentAudioIndex: 0,
-              playedCount: state.playedCount + 1,
-              currentRepeat: 0,
-              totalAudios: newPlaylist.length
-            },
-            currentItem: newPlaylist[0] || null
-          });
+            set({
+              playlist: newPlaylist,
+              state: {
+                ...state,
+                currentAudioIndex: 0,
+                playedCount: state.playedCount + 1,
+                currentRepeat: 0,
+                totalAudios: newPlaylist.length
+              },
+              currentItem: newPlaylist[0] || null
+            });
+          } else {
+            // 时间已到或练习已停止，结束练习
+            console.log('Time is up or practice stopped, ending dictation');
+            const currentStats = get().stats;
+            const startTime = currentStats.startTime;
+            const endTime = new Date();
+            const sessionDuration = Math.floor((endTime.getTime() - startTime.getTime()) / 1000);
+
+            set({
+              state: {
+                ...state,
+                isActive: false,
+                remainingTime: 0
+              },
+              stats: {
+                ...currentStats,
+                endTime,
+                sessionDuration
+              }
+            });
+          }
         }
       },
       previousAudio: () => {
